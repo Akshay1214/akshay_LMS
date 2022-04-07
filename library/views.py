@@ -15,19 +15,15 @@ def home_view(request):
         return HttpResponseRedirect('afterlogin')
     return render(request,'library/index.html')
 
-#for showing signup/login button for student
 def studentclick_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('afterlogin')
     return render(request,'library/studentclick.html')
 
-#for showing signup/login button for teacher
 def adminclick_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('afterlogin')
     return render(request,'library/adminclick.html')
-
-
 
 def adminsignup_view(request):
     form=forms.AdminSigupForm()
@@ -38,17 +34,11 @@ def adminsignup_view(request):
             user.set_password(user.password)
             user.save()
 
-
             my_admin_group = Group.objects.get_or_create(name='ADMIN')
             my_admin_group[0].user_set.add(user)
 
             return HttpResponseRedirect('adminlogin')
     return render(request,'library/adminsignup.html',{'form':form})
-
-
-
-
-
 
 def studentsignup_view(request):
     form1=forms.StudentUserForm()
@@ -70,9 +60,6 @@ def studentsignup_view(request):
 
         return HttpResponseRedirect('studentlogin')
     return render(request,'library/studentsignup.html',context=mydict)
-
-
-
 
 def is_admin(user):
     return user.groups.filter(name='ADMIN').exists()
@@ -103,15 +90,11 @@ def viewbook_view(request):
     books=models.Book.objects.all()
     return render(request,'library/viewbook.html',{'books':books})
 
-
-
-
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def issuebook_view(request):
     form=forms.IssuedBookForm()
     if request.method=='POST':
-        #now this form have data from html
         form=forms.IssuedBookForm(request.POST)
         if form.is_valid():
             obj=models.IssuedBook()
@@ -130,7 +113,6 @@ def viewissuedbook_view(request):
     for ib in issuedbooks:
         issdate=str(ib.issuedate.day)+'-'+str(ib.issuedate.month)+'-'+str(ib.issuedate.year)
         expdate=str(ib.expirydate.day)+'-'+str(ib.expirydate.month)+'-'+str(ib.expirydate.year)
-        #fine calculation
         days=(date.today()-ib.issuedate)
         print(date.today())
         d=days.days
@@ -172,7 +154,6 @@ def viewissuedbookbystudent(request):
             li1.append(t)
         issdate=str(ib.issuedate.day)+'-'+str(ib.issuedate.month)+'-'+str(ib.issuedate.year)
         expdate=str(ib.expirydate.day)+'-'+str(ib.expirydate.month)+'-'+str(ib.expirydate.year)
-        #fine calculation
         days=(date.today()-ib.issuedate)
         print(date.today())
         d=days.days
