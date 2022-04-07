@@ -76,7 +76,7 @@ def afterlogin_view(request):
 def addbook_view(request):
     form=forms.BookForm()
     if request.method=='POST':
-        #now this form have data from html
+        
         form=forms.BookForm(request.POST)
         if form.is_valid():
             user=form.save()
